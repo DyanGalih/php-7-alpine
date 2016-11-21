@@ -85,10 +85,12 @@ RUN set -xe \
 		libxml2-dev \
 		openssl-dev \
 		sqlite-dev \
+		openldap-dev \
 	\
 	&& docker-php-source extract \
 	&& cd /usr/src/php \
 	&& ./configure \
+		--with-ldap \
 		--with-config-file-path="$PHP_INI_DIR" \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
 		\
@@ -175,11 +177,8 @@ RUN apk upgrade --update && apk add \
   freetype-dev \
   libjpeg-turbo-dev \
   libltdl \
-  openldap-dev \
   libmcrypt-dev \
   libpng-dev \
-&& docker-php-ext-configure ldap --with-libdir=lib/ \
-&& docker-php-ext-install ldap \
 && docker-php-ext-install -j$(nproc) iconv mcrypt \
 && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 && docker-php-ext-install -j$(nproc) gd
